@@ -2,7 +2,7 @@
 
 # **Color Picker Game Using Potentiometer**
 
-# Color Picker Game Using Potentiometer
+# Milestone3
 
 ## Project Overview
 The **Color Picker Game Using Potentiometer** is an interactive project that combines physical computing with digital interactivity. Players manipulate three potentiometers to adjust Red, Green, and Blue (RGB) color values, attempting to match a randomly generated target color displayed on a digital interface. The project blends hardware (Arduino) and software (p5.js) to provide a fun, educational experience about RGB color mixing, with real-time feedback through visual, auditory, and numerical cues.
@@ -40,7 +40,7 @@ The following system diagram outlines how the components interact in the game:
 ### **FSM Diagram**
 The Finite State Machine (FSM) diagram defines the states of the game and their transitions:
 
-![FSM Diagram](https://via.placeholder.com/600x400?text=FSM+Diagram)
+![FSM Diagram](FSMDiagram.jpg)
 
 1. **Start Screen**: Display instructions and await player input to start.
 2. **Gameplay**: Players adjust potentiometers to match the target color.
@@ -136,24 +136,7 @@ The circuit connects the hardware components for the game:
 
 ---
 
-## Relevance and Importance
-
-### **Course Relevance**
-- Demonstrates physical computing principles.
-- Explores interactivity through human-computer interfaces.
-- Applies concepts of finite state machines, feedback systems, and serial communication.
-
-### **Societal Connection**
-- Highlights the blend of physical and digital interaction in education.
-- Demonstrates the role of gamification in learning.
-
-### **Personal Relevance**
-- Combines interests in technology, design, and education.
-- Provides a creative and hands-on experience in game development.
-
----
-
-## Milestone 3 Deliverables
+## Deliverables
 
 1. **Working Prototype**:
    - Functional circuit with Arduino controlling the RGB LED and buzzer.
