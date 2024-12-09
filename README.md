@@ -27,7 +27,7 @@ The **Color Picker Game Using Potentiometer** is an interactive project that com
 ### **System Diagram**
 The following system diagram outlines how the components interact in the game:
 
-![System Diagram](System Diagram.jpg)
+![System Diagram](SystemDiagram.jpg)
 
 - **Inputs**: Three potentiometers provide analog signals to the Arduino.
 - **Processing**: Arduino reads the signals and calculates RGB values. These values are sent to p5.js via serial communication.
@@ -40,7 +40,7 @@ The following system diagram outlines how the components interact in the game:
 ### **FSM Diagram**
 The Finite State Machine (FSM) diagram defines the states of the game and their transitions:
 
-![FSM Diagram](FSMDiagram.jpg)
+![FSM Diagram](FSMdiagram.jpg)
 
 1. **Start Screen**: Display instructions and await player input to start.
 2. **Gameplay**: Players adjust potentiometers to match the target color.
@@ -56,7 +56,7 @@ Transitions are driven by:
 ### **Circuit Diagram**
 The circuit connects the hardware components for the game:
 
-![Circuit Diagram](https://via.placeholder.com/600x400?text=Circuit+Diagram)
+![Circuit Diagram](CircuitDiagram.jpg)
 
 - **Potentiometers**: Connected to analog pins of the Arduino.
 - **RGB LED**: Connected to digital pins through current-limiting resistors.
@@ -146,37 +146,63 @@ The circuit connects the hardware components for the game:
    - p5.js code for game interface and logic.
 3. **Updated Diagrams**:
    - Refined system, circuit, and FSM diagrams.
-4. **Pseudocode**:
-   ### **Features and Feedback Mechanisms**
 
 #### **Scoring Logic**
 The game calculates how closely the player's selected color matches the target color using the following logic:
 
+## Pseudocode:
 ```plaintext
-Function calculateMatch(selectedColor, targetColor):
-    Calculate Euclidean distance between selectedColor and targetColor
-    Normalize distance to a percentage (100% for perfect match)
-    Return the percentage score
 Setup:
-    Initialize a timer variable (e.g., countdown = 60 seconds)
+    Initialize serial communication between Arduino and p5.js.
+    Set up pin modes for:
+        - LEDs (Output pins for Red, Green, Blue LEDs).
+        - Potentiometers (Analog input pins for Red, Green, Blue adjustments).
+    Initialize timer and game state variables:
+        - timer = 60 seconds (for countdown).
+        - state = "Start Screen" (initial state).
+    Generate a random target color using generateTargetColor().
+
+Function calculateMatch(selectedColor, targetColor):
+    Input: selectedColor (RGB array), targetColor (RGB array)
+    Output: matchPercentage (0-100%)
+
+    Calculate the Euclidean distance between selectedColor and targetColor:
+        distance = sqrt(
+            (selectedColor[0] - targetColor[0])^2 +
+            (selectedColor[1] - targetColor[1])^2 +
+            (selectedColor[2] - targetColor[2])^2
+        )
+    
+    Normalize the distance to a percentage score:
+        maxDistance = sqrt(255^2 + 255^2 + 255^2) // Maximum possible distance
+        matchPercentage = (1 - (distance / maxDistance)) * 100
+
+    Return matchPercentage
+Initialize:
+    timer = 60 seconds // Total time for the game round
 
 Loop:
-    Decrease the timer by the elapsed time
-    If timer reaches zero:
-        Transition to "Game Over" state
-Arduino:
-    Read potentiometer values
-    Map values to 0-255 range
-    Send values via Serial in the format "R,G,B"
+    Decrease the timer based on elapsed time:
+        elapsedTime = currentTime - lastUpdateTime
+        timer = timer - elapsedTime
 
-p5.js:
-    Listen for Serial data
-    Parse received data into R, G, and B values
-    Update the displayed color
+    If timer <= 0:
+        Transition to "Scoring" state
+
+Function generateTargetColor():
+    Input: None
+    Output: targetColor (RGB array)
+
+    Generate random values for Red, Green, and Blue:
+        red = random(0, 255)
+        green = random(0, 255)
+        blue = random(0, 255)
+
+    Return targetColor = [red, green, blue]
 
 
 ---
-
+```
 ## **Milestone 2: Project Proposal, Planning, and Organizing**
 
 ### **1. Project Overview**
