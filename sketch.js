@@ -7,17 +7,14 @@ let resetButtonState = 0;
 let lastResetButtonState = 1;
 let modeButtonState = 0; // New button state for mode selection
 let lastModeButtonState = 0; // To track button press for mode change
-
 let targetColors;
 let currentTargetIndex = 0;
 let score = 0;
 let matchPercentage = 0;
 let roundScores = [];
-
 let startTime;
-let gameDuration = 3000; // Default 45 seconds
+let gameDuration = 45000; // 45 seconds
 let gameOverTime = 3000; // 3 seconds for game over screen
-
 let isGameOver = false;
 let gameOverStartTime = 0;
 let isGameStarted = false;
@@ -26,18 +23,13 @@ let isEasyMode = true; // Default mode is Easy
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
   serialPort = new p5.SerialPort();
   serialPort.open('COM12'); // Adjust to your serial port
   serialPort.on('data', serialEvent); // Read incoming data from Arduino
-  serialPort.on('error', serialError);
+  serialPort.on('error', serialError); // Handle serial errors
 
-  // Define target colors for easy and hard modes
-  targetColors = [
-    color(255, 0, 0),  // Red
-    color(0, 255, 0),  // Green
-    color(0, 0, 255)   // Blue
-  ];
+  // Initial target colors for easy and hard modes
+  updateTargetColors(); // Initialize target colors based on the default mode (Easy)
 }
 
 function draw() {
@@ -54,7 +46,7 @@ function draw() {
   if (isWelcomeScreen) {
     displayWelcomeScreen();
     if (resetButtonState == 1 && lastResetButtonState == 0) {
-      startGame();  // Start the game when button is pressed
+      startGame(); // Start the game when button is pressed
     }
     lastResetButtonState = resetButtonState;
     return; // Exit here to ensure game logic doesn't run yet
@@ -64,7 +56,7 @@ function draw() {
   if (isGameOver) {
     displayGameOverScreen();
     if (resetButtonState == 1 && lastResetButtonState == 0) {
-      resetGame();  // Reset the game when button is pressed
+      resetGame(); // Reset the game when button is pressed
     }
     lastResetButtonState = resetButtonState;
     return;
@@ -80,7 +72,6 @@ function displayWelcomeScreen() {
   fill(255);
   textAlign(CENTER);
   text('Welcome to the Color Picker Game!', width / 2, height / 3);
-
   textSize(24);
   text('Use the potentiometers to match the colors.', width / 2, height / 3 + 50);
   text('Press the Start Button to begin.', width / 2, height / 3 + 100);
@@ -122,16 +113,29 @@ function displayGameOverScreen() {
   textSize(24);
   text(`Total Score: ${score}`, width / 2, height / 4 + 50);
 
-  // Round-wise Scores (Displayed on the left side)
+  // Round-wise Scores
   textSize(18);
   textAlign(LEFT);
   fill(255);
   text('Round Scores:', 30, height / 14);
 
-  let yOffset = height / 7 + 4;
-  roundScores.forEach((roundScore, index) => {
-    text(`Round ${index + 1}: ${roundScore.score} points`, 50, yOffset);
-    yOffset += 30; // Add spacing for each round
+  let leftYOffset = height / 7 + 4;  // Y offset for the left side (first 17 rounds)
+  let rightYOffset = height / 7 + 4; // Y offset for the right side (remaining rounds)
+
+  let maxRoundsToDisplay = 17; // Maximum rounds to display at once
+  let roundsToDisplay = roundScores.slice(0, maxRoundsToDisplay); // Show first 17 rounds
+
+  // Display the first 17 rounds on the left side
+  roundsToDisplay.forEach((roundScore, index) => {
+    text(`Round ${index + 1}: ${roundScore.score} points`, 50, leftYOffset);
+    leftYOffset += 30; // Add spacing for each round
+  });
+
+  // Display remaining rounds (if any) on the right side
+  let remainingRounds = roundScores.slice(maxRoundsToDisplay);
+  remainingRounds.forEach((roundScore, index) => {
+    text(`Round ${maxRoundsToDisplay + index + 1}: ${roundScore.score} points`, width / 2 + 50, rightYOffset);
+    rightYOffset += 30; // Add spacing for each round
   });
 
   // Restart Text
@@ -140,6 +144,8 @@ function displayGameOverScreen() {
   textAlign(CENTER);
   text('Press Reset Button to Restart', width / 2, height - 100);
 }
+
+
 
 function displayGameElements() {
   // Display Target Color
@@ -175,7 +181,6 @@ function displayGameElements() {
   let remainingTime = gameDuration - (millis() - startTime);
   textAlign(RIGHT);
   text(`Time: ${ceil(remainingTime / 1000)}s`, width - 50, height - 50);
-
   if (remainingTime <= 0) {
     endGame();
   }
@@ -185,14 +190,27 @@ function handleMatchLogic() {
   let similarity = calculateSimilarity(redValue, greenValue, blueValue, targetColors[currentTargetIndex].levels);
   matchPercentage = similarity;
 
-  if (matchPercentage >= 80) {
-    score += 5;
-    roundScores.push({ round: roundScores.length + 1, score: 5 });
-    matchPercentage = 0;
-    currentTargetIndex = (currentTargetIndex + 1) % targetColors.length;
+  // Change the condition to match if similarity is >= 80 for Hard mode
+  if (isEasyMode) {
+    if (matchPercentage >= 95) {
+      score += 5;
+      roundScores.push({ round: roundScores.length + 1, score: 5 });
+      matchPercentage = 0;
+      currentTargetIndex = (currentTargetIndex + 1) % targetColors.length;
 
-    // Send signal to Arduino for score match beep (Signal 1)
-    serialPort.write(1);  // Signal 1 for single beep
+      // Send signal to Arduino for score match beep (Signal 1)
+      serialPort.write(1); // Signal 1 for single beep
+    }
+  } else { // For Hard mode
+    if (matchPercentage >= 80) { // 80% match or higher for Hard mode
+      score += 5;
+      roundScores.push({ round: roundScores.length + 1, score: 5 });
+      matchPercentage = 0;
+      currentTargetIndex = (currentTargetIndex + 1) % targetColors.length;
+
+      // Send signal to Arduino for score match beep (Signal 1)
+      serialPort.write(1); // Signal 1 for single beep
+    }
   }
 }
 
@@ -222,22 +240,25 @@ function endGame() {
 }
 
 function resetGame() {
-  isWelcomeScreen = true;  // Reset to welcome screen
-  isGameStarted = false;   // Not yet started
-  isGameOver = false;      // No game over
+  isWelcomeScreen = true; // Reset to welcome screen
+  isGameStarted = false; // Not yet started
+  isGameOver = false; // No game over
 }
 
 function toggleGameMode() {
+  isEasyMode = !isEasyMode;
+  updateTargetColors();  // Update target colors when mode changes
+  
+  // Adjust game duration based on selected mode
   if (isEasyMode) {
-    gameDuration = 2000; // Shorter time for hard mode
-    isEasyMode = false;
-    console.log("Switched to Hard Mode");
+    gameDuration = 25000;  // 25 seconds for Easy mode
+    console.log("Switched to Easy Mode (25 seconds)");
   } else {
-    gameDuration = 3000; // Default time for easy mode
-    isEasyMode = true;
-    console.log("Switched to Easy Mode");
+    gameDuration = 45000;  // 45 seconds for Hard mode
+    console.log("Switched to Hard Mode (45 seconds)");
   }
 }
+
 
 // Serial communication functions
 function serialEvent() {
@@ -249,11 +270,29 @@ function serialEvent() {
       greenValue = int(values[1]);
       blueValue = int(values[2]);
       resetButtonState = int(values[3]);
-      modeButtonState = int(values[4]);
+      modeButtonState = int(values[4]); // Reading mode button state
     }
   }
 }
 
-function serialError(err) {
-  console.error("Serial Error: ", err);
+function serialError(error) {
+  console.log('Serial port error: ' + error);
+}
+
+function updateTargetColors() {
+  if (isEasyMode) {
+    targetColors = [
+      color(255, 0, 0),   // Red
+      color(0, 255, 0),   // Green
+      color(0, 0, 255),   // Blue
+    ];
+  } else {
+    targetColors = [
+      color(random(255), random(255), random(255)),
+      color(random(255), random(255), random(255)),
+      color(random(255), random(255), random(255)),
+      color(random(255), random(255), random(255)),
+      color(random(255), random(255), random(255))
+    ];
+  }
 }
