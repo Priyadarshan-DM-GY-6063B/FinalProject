@@ -46,7 +46,7 @@ This project reflects the integration of programming concepts, including custom 
 6. **Customizable Difficulty:**
    - Players can select their desired difficulty mode at the start of the game.
 
-## **System Diagram**
+## **New Circuit Diagram**
 ![New Circuit Diagram](finalcircuitdiagram.png)
 
 
