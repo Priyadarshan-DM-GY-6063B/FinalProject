@@ -5,7 +5,7 @@ int potRPin = A0;
 int potGPin = A1;
 int potBPin = A2;
 int buzzerPin = 8;
-int buttonPin = 4; // Existing button on pin 5
+int buttonPin = 4; // Existing button on pin 4
 int resetButtonPin = 7; // Reset button on pin 7
 
 void setup() {

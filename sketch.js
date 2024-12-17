@@ -12,7 +12,7 @@ let currentTargetIndex = 0;
 let score = 0;
 let matchPercentage = 0;
 let roundScores = [];
-let startTime;
+let startTime;  
 let gameDuration = 45000; // 45 seconds
 let gameOverTime = 3000; // 3 seconds for game over screen
 let isGameOver = false;
@@ -24,7 +24,7 @@ let isEasyMode = true; // Default mode is Easy
 function setup() {
   createCanvas(windowWidth, windowHeight);
   serialPort = new p5.SerialPort();
-  serialPort.open('COM12'); // Adjust to your serial port
+  serialPort.open('COM12'); // the serial port that i connected to arduino
   serialPort.on('data', serialEvent); // Read incoming data from Arduino
   serialPort.on('error', serialError); // Handle serial errors
 

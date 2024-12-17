@@ -2,6 +2,84 @@
 
 # **Color Picker Game Using Potentiometer**
 
+# Milestone4
+
+## New Features and Updates:
+
+# 
+## **Overview**
+The Color Picker Game is an interactive project that combines Arduino and p5.js to create a unique color-matching game. Players adjust RGB values using potentiometers to match a randomly generated target color within a time limit. The project showcases physical computing, real-time visual feedback, and creative game design.
+
+This project reflects the integration of programming concepts, including custom functions, arrays, classes, and logical structures, with physical computing. It highlights the use of real-world sensors and actuators to enhance user experience.
+
+---
+
+## **Implemented Features**
+1. **Core Gameplay:**
+   - **Random Target Color:** Each round begins with a randomly generated target color displayed in the sketch.
+   - **RGB Adjustment:** Players use potentiometers to adjust the red, green, and blue components to match the target.
+   - **Scoring:** Matches with 95%+ accuracy earn 5 points.
+
+2. **Real-Time Feedback:**
+   - **RGB LED:** Updates to match the current RGB values in real-time.
+   - **Auditory Feedback via Buzzer:**
+     - Single beep for successful matches.
+     - Rapid beeps as time runs out.
+     - Continuous tone for the game-over state.
+
+3. **Game States and Flow:**
+   - **Welcome Screen:** Introduces the game and provides instructions.
+   - **Gameplay Screen:** Displays the target color, timer, and live score.
+   - **Game Over Screen:** Shows the total score and round-specific breakdown.
+   - **Reset Functionality:** Allows players to restart the game after completion.
+
+4. **Timer and Transitions:**
+   - **45-Second Gameplay Timer:** Defines the duration of each round.
+   - **Smooth State Transitions:** Automatically moves between welcome, gameplay, and game-over states.
+
+5. **Difficulty Modes:**
+   - **Easy Mode:**  
+     - A longer time limit (60 seconds per round) and a larger threshold for scoring (90% accuracy).
+   - **Hard Mode:**  
+     - A shorter time limit (30 seconds per round) and stricter scoring criteria (98% accuracy).  
+
+6. **Customizable Difficulty:**
+   - Players can select their desired difficulty mode at the start of the game.
+
+
+![New Circuit Diagram](finalcircuitdiagram.png)
+
+
+---
+
+## **Ideas and Concepts Implemented**
+1. **Interactivity through Physical Controls:**
+   - Potentiometers map real-world user input to virtual RGB values in p5.js.
+   - Game actions are controlled using an external reset button.
+
+2. **Real-Time Feedback Loop:**
+   - Synchronization between Arduino hardware (potentiometers, RGB LED, buzzer) and p5.js ensures a responsive and engaging user experience.
+
+3. **Gamification:**
+   - Designed a scoring system and dynamic gameplay to make the project both fun and challenging.
+   - Multiple difficulty modes cater to different player skill levels.
+
+4. **Creative Coding:**
+   - Leveraged p5.js for dynamic visual elements and Arduino for tactile interactions.
+   - Utilized object-oriented programming with classes to manage game states and scoring.
+
+---
+
+## **System Diagram**
+```
++-------------------+       Serial Communication       +----------------------+
+|    Arduino Board  | <------------------------------> |       p5.js Sketch   |
+|                   |                                  |                      |
+| - Potentiometers  | ---> Send RGB values to p5.js    | - Display target RGB |
+| - RGB LED + Buzzer| <--- Feedback signals from p5.js | - Game logic         |
++-------------------+                                  +----------------------+
+```
+
 # Milestone3
 
 ## Project Overview
