@@ -27,9 +27,12 @@ void loop() {
   int resetButtonState = digitalRead(resetButtonPin);
 
   // Map and write values to RGB LED
-  analogWrite(redPin, map(redValue, 0, 1023, 0, 255));
-  analogWrite(greenPin, map(greenValue, 0, 1023, 0, 255));
-  analogWrite(bluePin, map(blueValue, 0, 1023, 0, 255));
+  redValue=map(redValue, 0, 1023, 0, 255);
+  greenValue=map(greenValue, 0, 1023, 0, 255);
+  blueValue=map(blueValue, 0, 1023, 0, 255);
+  analogWrite(redPin, redValue );
+  analogWrite(greenPin, greenValue );
+  analogWrite(bluePin, blueValue);
 
   // Send data to p5.js
   Serial.print(redValue);

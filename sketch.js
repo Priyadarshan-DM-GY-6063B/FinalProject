@@ -192,7 +192,7 @@ function handleMatchLogic() {
 
   // Change the condition to match if similarity is >= 80 for Hard mode
   if (isEasyMode) {
-    if (matchPercentage >= 95) {
+    if (matchPercentage >= 90) {
       score += 5;
       roundScores.push({ round: roundScores.length + 1, score: 5 });
       matchPercentage = 0;
