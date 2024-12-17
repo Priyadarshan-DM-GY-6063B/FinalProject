@@ -9,7 +9,7 @@
 ## **Overview**
 The Color Picker Game is an interactive project that combines Arduino and p5.js to create a unique color-matching game. Players adjust RGB values using potentiometers to match a randomly generated target color within a time limit. The project showcases physical computing, real-time visual feedback, and creative game design.
 
-This project reflects the integration of programming concepts, including custom functions, arrays, classes, and logical structures, with physical computing. It highlights the use of real-world sensors and actuators to enhance user experience.
+This project reflects the integration of programming concepts, including custom functions, arrays, classes, and logical structures, with physical computing. It highlights the use of real-world sensors and actuators to enhance user experience with two different modes like easy and hard which finishes game in different timing and color randomness in different modes.
 
 ---
 
@@ -38,9 +38,10 @@ This project reflects the integration of programming concepts, including custom 
 
 5. **Difficulty Modes:**
    - **Easy Mode:**  
-     - A longer time limit (60 seconds per round) and a larger threshold for scoring (90% accuracy).
+     - A longer time limit (60 seconds per round) and a larger threshold for scoring (90% accuracy) with just RGB values of matching only Red,green and Blue as target 
+       colors.
    - **Hard Mode:**  
-     - A shorter time limit (30 seconds per round) and stricter scoring criteria (98% accuracy).  
+     - A shorter time limit (30 seconds per round) and stricter scoring criteria (98% accuracy) with matching of Random colors as a target colors.  
 
 6. **Customizable Difficulty:**
    - Players can select their desired difficulty mode at the start of the game.
@@ -68,16 +69,6 @@ This project reflects the integration of programming concepts, including custom 
    - Utilized object-oriented programming with classes to manage game states and scoring.
 
 ---
-
-## **System Diagram**
-```
-+-------------------+       Serial Communication       +----------------------+
-|    Arduino Board  | <------------------------------> |       p5.js Sketch   |
-|                   |                                  |                      |
-| - Potentiometers  | ---> Send RGB values to p5.js    | - Display target RGB |
-| - RGB LED + Buzzer| <--- Feedback signals from p5.js | - Game logic         |
-+-------------------+                                  +----------------------+
-```
 
 # Milestone3
 
