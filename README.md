@@ -4,9 +4,8 @@
 
 # Milestone4
 
-## New Features and Updates:
+## New Features and Updates for Final Project:
 
-# 
 ## **Overview**
 The Color Picker Game is an interactive project that combines Arduino and p5.js to create a unique color-matching game. Players adjust RGB values using potentiometers to match a randomly generated target color within a time limit. The project showcases physical computing, real-time visual feedback, and creative game design.
 
